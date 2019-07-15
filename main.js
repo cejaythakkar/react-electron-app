@@ -1,6 +1,7 @@
-const electron = require('electron');
-
-const { app , BrowserWindow } = electron;
+const electron = require('electron'),
+    { app , BrowserWindow } = electron,
+    url = require('url'),
+    path = require('path');
 
 let mainWindow;
 app.on('ready',()=>{
@@ -8,8 +9,12 @@ app.on('ready',()=>{
         width:1000,
         height:800
     });
-
-    mainWindow.loadURL('http://localhost:3000');
+    const startUrl = process.env.ELECTRON_START_URL || URL.format({
+        path: path.join(__dirname,'..','build','index.html'),
+        protocol:'file:',
+        slashes:true,
+    })
+    mainWindow.loadURL(startUrl);
 
     mainWindow.on('closed',()=>{
         app.quit();
